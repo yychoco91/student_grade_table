@@ -1,10 +1,12 @@
 /**
  * Define all global variables here
  */
+    var add_student={};
+
 /**
  * student_array - global array to hold student objects
  * @type {Array}
- */
+ */var student_array=[];
 
 /**
  * inputIds - id's of the elements that are used to add students
@@ -14,10 +16,50 @@
 /**
  * addClicked - Event Handler when user clicks the add button
  */
+      function addClicked(){
+
+          var name = $("#studentName").val();
+          var course = $("#course").val();
+          var grade = $("#studentGrade").val();
+
+          //add values into an object
+          add_student={
+              "studentName":name,
+              "course":course,
+              "grade":grade,
+          }
+          console.log(add_student);
+
+          //store object into array
+          student_array.push(add_student);
+
+          console.log(student_array);
+
+          //display info from array in table
+          $("tbody").empty();
+          for(i=0; i<student_array.length; i++){
+
+            $("tbody").append("<tr><td>"+ student_array[i].studentName +"</td><td>"+ student_array[i].course +"</td><td>"+ student_array[i].grade+"</td><td><button class='btn btn-danger'>Delete</button></td></tr>");
+
+          }
+
+           // $('<button>Delete </button>').class("btn btn-danger")
+
+          //clear values inside form element
+          clearAddStudentForm() ;
+          calculateAverage();
+
+      }
+
 
 /**
  * cancelClicked - Event Handler when user clicks the cancel button, should clear out student form
  */
+  function cancelClicked(){
+    $("#studentName").val("");
+    $("#course").val("");
+    $("#studentGrade").val("");
+}
 
 /**
  * addStudent - creates a student objects based on input fields in the form and adds the object to global student array
@@ -27,12 +69,26 @@
 
 /**
  * clearAddStudentForm - clears out the form values based on inputIds variable
- */
+ *     //clear values inside form element
+ */function clearAddStudentForm(){
+    $("#studentName").val("");
+    $("#course").val("");
+    $("#studentGrade").val("");
+}
 
 /**
  * calculateAverage - loop through the global student array and calculate average grade and return that value
  * @returns {number}
  */
+    function calculateAverage(){
+        var sum=0;
+        for(i=0; i<student_array.length;i++){
+            sum+=parseInt(student_array[i].grade);
+        }
+        var average=Math.floor(sum/student_array.length);
+        $(".avgGrade").empty();
+        $(".avgGrade").append(average);
+    }
 
 /**
  * updateData - centralized function to update the average and call student list update
