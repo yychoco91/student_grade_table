@@ -2,11 +2,11 @@
  * Define all global variables here
  */
     var add_student={};
-
+    var student_array=[];
 /**
  * student_array - global array to hold student objects
  * @type {Array}
- */var student_array=[];
+ */
 
 /**
  * inputIds - id's of the elements that are used to add students
@@ -37,20 +37,32 @@
 
           //display info from array in table
           $("tbody").empty();
-          for(i=0; i<student_array.length; i++){
+          for(var i=0; i<student_array.length; i++){
 
             $("tbody").append("<tr><td>"+ student_array[i].studentName +"</td><td>"+ student_array[i].course +"</td><td>"+ student_array[i].grade+"</td><td><button class='btn btn-danger'>Delete</button></td></tr>");
 
           }
-
-           // $('<button>Delete </button>').class("btn btn-danger")
-
           //clear values inside form element
-          clearAddStudentForm() ;
+          clearAddStudentForm();
           calculateAverage();
-
       }
 
+    $(document).ready(function(){
+        removeRow();
+    });
+
+/**
+ * removeRow - removes row from table when delete button is clicked
+ */
+    function removeRow(){
+        $('tbody').on('click','.btn-danger',function(){
+            //console.log($(this).closest('tr').index());
+            student_array.splice($(this).closest('tr').index(),1); //splices the array at row corresponding to the index of 'this'. This currently points to the button clicked.
+            $(this).closest('tr').remove();
+            calculateAverage();   //invoke calculateAverage to update the avg when you remove a row
+
+        })
+    }
 
 /**
  * cancelClicked - Event Handler when user clicks the cancel button, should clear out student form
@@ -66,6 +78,7 @@
  *
  * @return undefined
  */
+
 
 /**
  * clearAddStudentForm - clears out the form values based on inputIds variable
