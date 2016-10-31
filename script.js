@@ -18,32 +18,9 @@
  */
       function addClicked(){
 
-          var name = $("#studentName").val();
-          var course = $("#course").val();
-          var grade = $("#studentGrade").val();
-
-          //add values into an object
-          add_student={
-              "studentName":name,
-              "course":course,
-              "grade":grade,
-          }
-          console.log(add_student);
-
-          //store object into array
-          student_array.push(add_student);
-
-          console.log(student_array);
-
-          //display info from array in table
-          $("tbody").empty();
-          for(var i=0; i<student_array.length; i++){
-
-            $("tbody").append("<tr><td>"+ student_array[i].studentName +"</td><td>"+ student_array[i].course +"</td><td>"+ student_array[i].grade+"</td><td><button class='btn btn-danger'>Delete</button></td></tr>");
-
-          }
-          //clear values inside form element
-          clearAddStudentForm();
+          addStudent();
+          addStudentToDom();
+          clearAddStudentForm();   //clear values inside form element
           calculateAverage();
       }
 
@@ -60,7 +37,6 @@
             student_array.splice($(this).closest('tr').index(),1); //splices the array at row corresponding to the index of 'this'. This currently points to the button clicked.
             $(this).closest('tr').remove();
             calculateAverage();   //invoke calculateAverage to update the avg when you remove a row
-
         })
     }
 
@@ -71,13 +47,41 @@
     $("#studentName").val("");
     $("#course").val("");
     $("#studentGrade").val("");
+    }
+
+/**
+ * getData - AJAX method call that gets student grade data from server
+ *
+ */
+function getData() {
+
+    $.ajax({
+        data: {api_key: 'In5rnwsSk8'},
+        dataType: 'json',
+        url: 'http://s-apis.learningfuze.com/sgt/get',
+        method: 'post',
+        success: function (response) {
+            console.log(response);
+        }
+    })
 }
 
 /**
  * addStudent - creates a student objects based on input fields in the form and adds the object to global student array
  *
  * @return undefined
- */
+ */function addStudent(){
+    var name = $("#studentName").val();
+    var course = $("#course").val();
+    var grade = $("#studentGrade").val();
+
+    add_student={
+        "studentName":name,
+        "course":course,
+        "grade":grade
+        };
+    student_array.push(add_student);      ////store object into array
+    }
 
 
 /**
@@ -115,7 +119,13 @@
  * addStudentToDom - take in a student object, create html elements from the values and then append the elements
  * into the .student_list tbody
  * @param studentObj
- */
+ * //display info from array in table
+ */ function addStudentToDom(){
+    $("tbody").empty();
+    for(var i=0; i<student_array.length; i++){
+        $("tbody").append("<tr><td>"+ student_array[i].studentName +"</td><td>"+ student_array[i].course +"</td><td>"+ student_array[i].grade+"</td><td><button class='btn btn-danger'>Delete</button></td></tr>");
+        }
+     }
 
 /**
  * reset - resets the application to initial state. Global variables reset, DOM get reset to initial load state
