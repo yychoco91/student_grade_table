@@ -17,11 +17,13 @@
  * addClicked - Event Handler when user clicks the add button
  */
       function addClicked(){
-
           addStudent();
+          createStudent();
           addStudentToDom();
           clearAddStudentForm();   //clear values inside form element
           calculateAverage();
+
+     console.log(student_array);
       }
 
     $(document).ready(function(){
@@ -34,8 +36,11 @@
     function removeRow(){
         $('tbody').on('click','.btn-danger',function(){
             //console.log($(this).closest('tr').index());
-            student_array.splice($(this).closest('tr').index(),1); //splices the array at row corresponding to the index of 'this'. This currently points to the button clicked.
+            var index= $(this).closest('tr').index()
+            var student_id= student_array[index].id;  //get id of student at student_array[index]
+            student_array.splice($(this).closest('tr').index(),1);     //splices the array at row corresponding to the index of 'this'. This currently points to the button clicked.
             $(this).closest('tr').remove();
+            deleteStudent(student_id);
             calculateAverage();   //invoke calculateAverage to update the avg when you remove a row
         })
     }
@@ -62,6 +67,43 @@ function getData() {
         method: 'post',
         success: function (response) {
             console.log(response);
+            student_array=student_array.concat(response.data);
+            //console.log(student_array);
+
+            addStudentToDom();
+
+        }
+    })
+}
+
+/**
+ * createStudent- sends new student data to server
+ *
+ */
+    function createStudent(){
+    var student_data={api_key: 'In5rnwsSk8',name:$("#studentName").val(), course:$("#course").val(), grade:$("#studentGrade").val()}
+    $.ajax({
+        data: student_data,
+        dataType: 'json',
+        url: 'http://s-apis.learningfuze.com/sgt/create',
+        method: 'post',
+        success: function (response) {
+            console.log(response);
+        }
+        })
+    }
+/**
+ * deleteStudent- removes student from database
+ */
+    function deleteStudent(student_id){
+        var remove_student={api_key: 'In5rnwsSk8', student_id: student_id }
+    $.ajax({
+        data: remove_student,
+        dataType: 'json',
+        url: 'http://s-apis.learningfuze.com/sgt/delete',
+        method: 'post',
+        success: function (response) {
+            console.log(response);
         }
     })
 }
@@ -76,13 +118,12 @@ function getData() {
     var grade = $("#studentGrade").val();
 
     add_student={
-        "studentName":name,
+        "name":name,
         "course":course,
         "grade":grade
         };
     student_array.push(add_student);      ////store object into array
     }
-
 
 /**
  * clearAddStudentForm - clears out the form values based on inputIds variable
@@ -113,7 +154,9 @@ function getData() {
 
 /**
  * updateStudentList - loops through global student array and appends each objects data into the student-list-container > list-body
- */
+ */function updateStudentList(){
+
+    }
 
 /**
  * addStudentToDom - take in a student object, create html elements from the values and then append the elements
@@ -122,8 +165,9 @@ function getData() {
  * //display info from array in table
  */ function addStudentToDom(){
     $("tbody").empty();
+
     for(var i=0; i<student_array.length; i++){
-        $("tbody").append("<tr><td>"+ student_array[i].studentName +"</td><td>"+ student_array[i].course +"</td><td>"+ student_array[i].grade+"</td><td><button class='btn btn-danger'>Delete</button></td></tr>");
+        $("tbody").append("<tr><td>"+ student_array[i].name +"</td><td>"+ student_array[i].course +"</td><td>"+ student_array[i].grade+"</td><td><button class='btn btn-danger'>Delete</button></td></tr>");
         }
      }
 
