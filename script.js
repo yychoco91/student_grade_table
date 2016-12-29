@@ -63,7 +63,7 @@ function getData() {
     $.ajax({
         data: {api_key: 'In5rnwsSk8'},
         dataType: 'json',
-        url: 'http://s-apis.learningfuze.com/sgt/get',
+        url: '//s-apis.learningfuze.com/sgt/get',
         method: 'post',
         success: function (response) {
             console.log(response);
@@ -85,7 +85,7 @@ function getData() {
     $.ajax({
         data: student_data,
         dataType: 'json',
-        url: 'http://s-apis.learningfuze.com/sgt/create',
+        url: '//s-apis.learningfuze.com/sgt/create',
         method: 'post',
         success: function (response) {
             console.log(response);
@@ -100,7 +100,7 @@ function getData() {
     $.ajax({
         data: remove_student,
         dataType: 'json',
-        url: 'http://s-apis.learningfuze.com/sgt/delete',
+        url: '//s-apis.learningfuze.com/sgt/delete',
         method: 'post',
         success: function (response) {
             console.log(response);
