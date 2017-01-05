@@ -28,6 +28,7 @@
 
     $(document).ready(function(){
         removeRow();
+        getData();
     });
 
 /**
@@ -36,7 +37,7 @@
     function removeRow(){
         $('tbody').on('click','.btn-danger',function(){
             //console.log($(this).closest('tr').index());
-            var index= $(this).closest('tr').index()
+            var index= $(this).closest('tr').index();
             var student_id= student_array[index].id;  //get id of student at student_array[index]
             student_array.splice($(this).closest('tr').index(),1);     //splices the array at row corresponding to the index of 'this'. This currently points to the button clicked.
             $(this).closest('tr').remove();
@@ -81,7 +82,7 @@ function getData() {
  *
  */
     function createStudent(){
-    var student_data={api_key: 'In5rnwsSk8',name:$("#studentName").val(), course:$("#course").val(), grade:$("#studentGrade").val()}
+    var student_data={api_key: 'In5rnwsSk8',name:$("#studentName").val(), course:$("#course").val(), grade:$("#studentGrade").val()};
     $.ajax({
         data: student_data,
         dataType: 'json',
@@ -96,7 +97,7 @@ function getData() {
  * deleteStudent- removes student from database
  */
     function deleteStudent(student_id){
-        var remove_student={api_key: 'In5rnwsSk8', student_id: student_id }
+        var remove_student={api_key: 'In5rnwsSk8', student_id: student_id };
     $.ajax({
         data: remove_student,
         dataType: 'json',
